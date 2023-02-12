@@ -9,6 +9,9 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick() {
+
+        WebScrapper webScrapper = new WebScrapper();
+
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 }
