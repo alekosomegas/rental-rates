@@ -1,16 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.ak.rentalrates.HelloController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ak.rentalrates.RentalRatesController">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+   <HBox>
+      <children>
+         <DatePicker fx:id="fromDatePicker" />
+         <DatePicker fx:id="toDatePicker" />
+      </children>
+   </HBox>
+   <ChoiceBox fx:id="selectCar" prefWidth="150.0" />
+    <Button onAction="#onHelloButtonClick" text="Get Quotes" />
+   <HBox alignment="CENTER" spacing="80.0">
+      <children>
+         <VBox>
+            <children>
+               <Label text="Low" />
+               <Label fx:id="lowPrice" />
+            </children>
+         </VBox>
+         <VBox>
+            <children>
+               <Label text="Avarage" />
+               <Label fx:id="averagePrice" />
+            </children>
+         </VBox>
+         <VBox>
+            <children>
+               <Label text="High" />
+               <Label fx:id="highPrice" />
+            </children>
+         </VBox>
+      </children>
+   </HBox>
+   <TextArea fx:id="taResults" prefHeight="500.0" prefWidth="200.0" />
 </VBox>

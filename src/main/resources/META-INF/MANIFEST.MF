@@ -1,0 +1,47 @@
+Manifest-Version: 1.0
+Main-Class: com.ak.rentalrates.Main
+Class-Path: jakarta.activation-1.2.2.jar jsr305-3.0.2.jar httpclient-4.5
+ .14.jar jcommander-1.82.jar netty-transport-native-kqueue-4.1.60.Final-
+ osx-x86_64.jar commons-lang3-3.12.0.jar async-http-client-2.12.3.jar je
+ tty-io-9.4.50.v20221201.jar failureaccess-1.0.1.jar selenium-chromium-d
+ river-4.6.0.jar async-http-client-netty-utils-2.12.3.jar selenium-chrom
+ e-driver-4.6.0.jar javafx-fxml-19-ea+3.jar commons-exec-1.3.jar netty-t
+ ransport-native-epoll-4.1.60.Final-linux-x86_64.jar httpmime-4.5.14.jar
+  selenium-api-4.6.0.jar netty-buffer-4.1.84.Final.jar opentelemetry-sdk
+ -trace-1.19.0.jar opentelemetry-sdk-1.19.0.jar selenium-safari-driver-4
+ .6.0.jar websocket-common-9.4.50.v20221201.jar byte-buddy-1.12.18.jar o
+ pentelemetry-semconv-1.19.0-alpha.jar htmlunit-xpath-2.70.0.jar jetty-c
+ lient-9.4.50.v20221201.jar javafx-controls-19-ea+3-win.jar netty-transp
+ ort-classes-kqueue-4.1.84.Final.jar opentelemetry-api-logs-1.19.0-alpha
+ .jar selenium-java-4.6.0.jar auto-service-1.0.1.jar javafx-controls-19-
+ ea+3.jar opentelemetry-exporter-common-1.19.0.jar netty-handler-4.1.84.
+ Final.jar opentelemetry-sdk-metrics-1.19.0.jar commons-net-3.9.0.jar co
+ mmons-logging-1.2.jar websocket-client-9.4.50.v20221201.jar reactive-st
+ reams-1.0.3.jar auto-common-1.2.jar error_prone_annotations-2.11.0.jar 
+ j2objc-annotations-1.3.jar selenium-devtools-v106-4.6.0.jar netty-react
+ ive-streams-2.0.4.jar selenium-edge-driver-4.6.0.jar selenium-firefox-d
+ river-4.6.0.jar neko-htmlunit-2.70.0.jar htmlunit-core-js-2.70.0.jar se
+ lenium-devtools-v105-4.6.0.jar selenium-support-4.6.0.jar netty-transpo
+ rt-native-epoll-4.1.84.Final.jar httpcore-4.4.16.jar jetty-util-9.4.50.
+ v20221201.jar netty-common-4.1.84.Final.jar opentelemetry-exporter-logg
+ ing-1.19.0.jar salvation2-3.0.1.jar htmlunit-2.70.0.jar opentelemetry-c
+ ontext-1.19.0.jar netty-transport-native-kqueue-4.1.84.Final.jar opente
+ lemetry-sdk-common-1.19.0.jar checker-qual-3.12.0.jar netty-handler-pro
+ xy-4.1.60.Final.jar javafx-base-19-ea+3.jar opentelemetry-sdk-extension
+ -autoconfigure-spi-1.19.0.jar netty-codec-socks-4.1.60.Final.jar seleni
+ um-json-4.6.0.jar netty-resolver-4.1.84.Final.jar listenablefuture-9999
+ .0-empty-to-avoid-conflict-with-guava.jar selenium-manager-4.6.0.jar se
+ lenium-devtools-v107-4.6.0.jar htmlunit-cssparser-1.14.0.jar commons-io
+ -2.10.0.jar netty-transport-native-unix-common-4.1.84.Final.jar javafx-
+ graphics-19-ea+3-win.jar javafx-graphics-19-ea+3.jar opentelemetry-api-
+ 1.19.0.jar netty-transport-classes-epoll-4.1.84.Final.jar selenium-remo
+ te-driver-4.6.0.jar netty-codec-http-4.1.84.Final.jar selenium-http-4.6
+ .0.jar netty-codec-4.1.84.Final.jar jetty-http-9.4.50.v20221201.jar jav
+ afx-base-19-ea+3-win.jar selenium-ie-driver-4.6.0.jar commons-codec-1.1
+ 5.jar commons-text-1.10.0.jar opentelemetry-sdk-extension-autoconfigure
+ -1.19.0-alpha.jar failsafe-3.3.0.jar opentelemetry-sdk-logs-1.19.0-alph
+ a.jar dec-0.1.2.jar netty-transport-4.1.84.Final.jar auto-service-annot
+ ations-1.0.1.jar slf4j-api-1.7.30.jar jtoml-2.0.0.jar javafx-fxml-19-ea
+ +3-win.jar guava-31.1-jre.jar selenium-devtools-v85-4.6.0.jar websocket
+ -api-9.4.50.v20221201.jar
+
