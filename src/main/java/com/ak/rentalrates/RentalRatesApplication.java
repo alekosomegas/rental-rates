@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class RentalRatesApplication extends Application {
 
-    RentalRatesController controller;
+    private RentalRatesController controller;
 
     @Override
     public void start(Stage stage) throws IOException {

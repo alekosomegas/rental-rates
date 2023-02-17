@@ -20,7 +20,7 @@
       </children>
    </HBox>
    <ChoiceBox fx:id="selectCar" prefWidth="150.0" />
-    <Button onAction="#onHelloButtonClick" text="Get Quotes" />
+    <Button fx:id="getQuotesBtn" defaultButton="true" onAction="#onGetQuotesButtonClick" text="Get Quotes" />
    <HBox alignment="CENTER" spacing="80.0">
       <children>
          <VBox>
