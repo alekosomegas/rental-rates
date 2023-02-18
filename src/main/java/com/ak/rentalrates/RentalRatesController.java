@@ -9,11 +9,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +39,9 @@ public class RentalRatesController {
     public TextArea taResults;
     @FXML
     public Button getQuotesBtn;
+    public Label lowPricePD;
+    public Label averagePricePD;
+    public Label highPricePD;
 
     private Car selectedCar;
     private ObservableList<Car> allCars = FXCollections.observableArrayList();
@@ -45,30 +52,40 @@ public class RentalRatesController {
     LocalDate from;
     LocalDate to;
 
+    MediaPlayer mediaPlayer;
 
     @FXML
     public void initialize() {
-        fromDatePicker.setValue(LocalDate.of(2023, 2, 20));
-        toDatePicker.setValue(LocalDate.of(2023, 2, 23));
-
         try {
-            loadCars();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/sounds/success.mp3")).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
+
+        fromDatePicker.setValue(LocalDate.of(2023, 2, 20));
+        toDatePicker.setValue(LocalDate.of(2023, 3, 20));
+
+        loadCars();
     }
 
     /**
      * Load all cars from cars.txt
-     * @throws IOException
      */
-    private void loadCars() throws IOException {
-        allCars = Cars.getAllCars();
-        ObservableList<String> list = FXCollections.observableArrayList();
-        for(Car car : allCars) {
-            list.add(car.getName());
+    // TODO: what happens when cannot read from cars.txt, when selectedCar is null
+    private void loadCars() {
+        try {
+            allCars = Cars.getAllCars();
+            ObservableList<String> list = FXCollections.observableArrayList();
+            for(Car car : allCars) {
+                list.add(car.getName());
+            }
+            selectCar.setItems(list);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        selectCar.setItems(list);
+
         selectCar.setValue("All");
         selectCar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -91,14 +108,23 @@ public class RentalRatesController {
         // update gui
         setPricesToLabels();
         setQuotesForCategory();
+
+        if(mediaPlayer != null) mediaPlayer.setAutoPlay(true);
     }
 
     private void setPricesToLabels() {
         int[] prices = results.getPrices(from, to, selectedCar.getCategory());
+        double daysRented = (double) Duration.between(from.atStartOfDay(), to.atStartOfDay()).toDays();
 
-        lowPrice.setText(String.valueOf(prices[0]));
-        averagePrice.setText(String.valueOf(prices[1]));
-        highPrice.setText(String.valueOf(prices[2]));
+        String format = "€%,d";
+        lowPrice.setText(String.format(format, prices[0]));
+        averagePrice.setText(String.format(format, prices[1]));
+        highPrice.setText(String.format(format, prices[2]));
+
+        format = "(€%,.0f)";
+        lowPricePD.setText(String.format(format, (double) prices[0]/daysRented));
+        averagePricePD.setText(String.format(format, (double) prices[1]/daysRented));
+        highPricePD.setText(String.format(format, (double) prices[2]/daysRented));
     }
 
     private void setQuotesForCategory() {

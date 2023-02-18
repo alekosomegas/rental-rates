@@ -6,10 +6,10 @@ import javafx.collections.ObservableList;
 import java.io.*;
 
 public class Cars {
-    private static ObservableList<Car> allCars = FXCollections.observableArrayList();
+    private static final ObservableList<Car> allCars = FXCollections.observableArrayList();
 
     public static ObservableList<Car> getAllCars() throws IOException {
-        File file = new File("cars.txt");
+        File file = new File("./cars.txt");
 
         BufferedReader br
                 = new BufferedReader(new FileReader(file));

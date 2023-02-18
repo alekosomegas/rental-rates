@@ -1,6 +1,7 @@
 module com.ak.rentalrates {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
 
     requires htmlunit;
 

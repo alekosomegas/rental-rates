@@ -7,7 +7,9 @@ import com.gargoylesoftware.htmlunit.html.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 public class WSPetsas extends WebScrapper {
     public WSPetsas(LocalDate from, LocalDate to) {
@@ -22,6 +24,8 @@ public class WSPetsas extends WebScrapper {
         XPATHS.put("to", "//*[@id=\"dofdate\"]");
         XPATHS.put("submit", "//*[@id=\"searchForm\"]/div[2]/div[3]/button");
         XPATHS.put("cars", "//*[@id=\"grp_list\"]");
+        XPATHS.put("month", "//*[@id=\"ui-datepicker-div\"]/div/div/select[1]");
+        XPATHS.put("year", "//*[@id=\"ui-datepicker-div\"]/div/div/select[2]");
     }
 
     @Override
@@ -43,6 +47,15 @@ public class WSPetsas extends WebScrapper {
             HtmlInput from = page.getFirstByXPath(XPATHS.get("from"));
             page = from.click();
 
+            HtmlSelect month = page.getFirstByXPath(XPATHS.get("month"));
+            List<HtmlOption> listOfMonths = month.getOptions();
+            for (HtmlOption option : listOfMonths) {
+                if (option.getText().equals(fromDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))) {
+                    option.setSelected(true);
+                    break;
+                }
+            }
+
             HtmlTableBody tableBody = page.getFirstByXPath(XPATHS.get("tableBody"));
             // get all anchor elements in the fromBody
             List<HtmlElement> listOfDates = tableBody.getElementsByAttribute("a", "href", "#");
@@ -50,6 +63,19 @@ public class WSPetsas extends WebScrapper {
             for (HtmlElement date : listOfDates) {
                 if(date.asNormalizedText().equals(String.valueOf(this.fromDate.getDayOfMonth()))) {
                     page = date.click();
+                    break;
+                }
+            }
+
+            HtmlInput to = page.getFirstByXPath(XPATHS.get("to"));
+            page = to.click();
+
+            HtmlSelect monthTo = page.getFirstByXPath(XPATHS.get("month"));
+            List<HtmlOption> listOfMonthsTo = monthTo.getOptions();
+            for (HtmlOption option : listOfMonthsTo) {
+                if (option.getText().equals(toDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))) {
+                    page = (HtmlPage) option.setSelected(true);
+                    monthTo.setSelectedAttribute(option, true);
                     break;
                 }
             }

@@ -7,9 +7,11 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class WSLeos extends WebScrapper{
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public WSLeos(LocalDate from, LocalDate to) {
         name = "Leos";
@@ -37,9 +39,8 @@ public class WSLeos extends WebScrapper{
             final HtmlInput to = page.getFirstByXPath(XPATHS.get("to"));
             final HtmlButton submit = page.getFirstByXPath(XPATHS.get("submit"));
 
-            // TODO: add calendar
-            from.setValue("22/02/2023");
-            to.setValue("25/02/2023");
+            from.setValue(formatter.format(fromDate));
+            to.setValue(formatter.format(toDate));
             submit.click();
 
             webClient.waitForBackgroundJavaScript(waitTime);
@@ -88,7 +89,20 @@ public class WSLeos extends WebScrapper{
     // TODO: implement
     @Override
     protected CATEGORY findCategory(String group) {
-        return CATEGORY.Luxury_4x4;
+        try {
+            group = group.split("/")[0].substring(7, 9);
+        } catch (StringIndexOutOfBoundsException e) {
+            return null;
+        }
+        return switch (group) {
+            case "A1", "A2", "B1", "B2" -> CATEGORY.Economic;
+            case "F1" -> CATEGORY.Luxury_A;
+            case "G1" -> CATEGORY.Luxury_B;
+            case "C4", "H2", "F2", "D2" -> CATEGORY.Luxury_4x4;
+            case "C1", "C2" -> CATEGORY.Standard;
+            case "E1" -> CATEGORY.MPV;
+            default -> null;
+        };
     }
 
 

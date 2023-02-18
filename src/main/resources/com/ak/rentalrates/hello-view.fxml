@@ -27,18 +27,21 @@
             <children>
                <Label text="Low" />
                <Label fx:id="lowPrice" />
+               <Label fx:id="lowPricePD" />
             </children>
          </VBox>
          <VBox>
             <children>
                <Label text="Avarage" />
                <Label fx:id="averagePrice" />
+               <Label fx:id="averagePricePD" />
             </children>
          </VBox>
          <VBox>
             <children>
                <Label text="High" />
                <Label fx:id="highPrice" />
+               <Label fx:id="highPricePD" />
             </children>
          </VBox>
       </children>

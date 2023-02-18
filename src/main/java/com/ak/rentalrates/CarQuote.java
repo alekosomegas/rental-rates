@@ -36,6 +36,6 @@ public class CarQuote {
 
     @Override
     public String toString() {
-        return " -> CAR: " + car + "\n" + " -> PRICE: " + price;
+        return " -> CAR: " + car + "\n" + " -> PRICE: " + String.format("€%,d",price);
     }
 }
