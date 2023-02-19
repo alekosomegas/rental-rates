@@ -1,122 +1,132 @@
-//package com.ak.rentalrates;
-//
-//import org.openqa.selenium.By;
-//import org.openqa.selenium.Keys;
-//import org.openqa.selenium.WebElement;
-//import org.openqa.selenium.interactions.Actions;
-//import org.openqa.selenium.support.ui.ExpectedConditions;
-//import org.openqa.selenium.support.ui.WebDriverWait;
-//
-//import java.time.Duration;
-//import java.util.List;
-//import java.util.concurrent.atomic.AtomicInteger;
-//
-///*
-// *
-//
-//
-// */
-//public class WSHertz extends WebScrapper {
-//
-//    public WSHertz(int[] dateRangeCoords) {
-//        driver.get("https://www.hertz.com.cy/");
-//        this.dateRangeCoords = dateRangeCoords;
-//    }
-//    @Override
-//    public void findQuotes() {
-//
-//        int attempts = 5;
-//        while(attempts > 0) {
-//            WebElement cookies = new WebDriverWait(driver, Duration.ofSeconds(10))
-//                    .until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"onetrust-close-btn-container\"]/button")));
-//            try {
-//                cookies.click();
-//                attempts = 0;
-//
-//            } catch (Exception e) {
-//                attempts--;
-//            }
-//        }
-//
-//        WebElement location = driver.findElement(By.xpath("//*[@id=\"select2-PickupLocationCode-container\"]/span"));
-//        location.click();
-//
-//        new Actions(driver)
-//                .sendKeys("lim")
-//                .pause(Duration.ofSeconds(1))
-//                .sendKeys(Keys.RETURN)
-//                .perform();
-//
-//        WebElement pickupDate = new WebDriverWait(driver, Duration.ofSeconds(1))
-//                .until(ExpectedConditions.elementToBeClickable(By.id("PickupDate")));
-//        pickupDate.click();
-//
-//        int x = dateRangeCoords[0];
-//        int y = dateRangeCoords[1];
-//
-//        WebElement day = driver.findElement(By.xpath("//*[@id=\"ui-datepicker-div\"]/div[1]/table/tbody/tr[" + y + "]/td[" + x + "]/a"));
-//        day.click();
-//
-//        WebElement returnDate = driver.findElement(By.id("ReturnDate"));
-//        returnDate.click();
-//        int x2 = dateRangeCoords[2];
-//        int y2 = dateRangeCoords[3];
-//        WebElement endDay = driver.findElement(By.xpath("//*[@id=\"ui-datepicker-div\"]/div[1]/table/tbody/tr[" + y2 + "]/td[" + x2 + "]/a"));
-//        endDay.click();
-//
-//        WebElement submit = driver.findElement(By.xpath("//*[@id=\"booking-step1-form\"]/div[2]/div[1]/div/div[3]/div/button[2]"));
-//        submit.click();
-//
-//
-//        WebElement showAll = new WebDriverWait(driver, Duration.ofSeconds(5))
-//                .until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"chooseVehicle\"]/div[2]/div[1]/div[2]/div[2]/div/div[2]/div/button")));
-//        showAll.click();
-//
-//        List<WebElement> cars = driver.findElements(By.className("e-typo-group"));
-//        List<WebElement> carNames = driver.findElements(By.className("e-typo-model"));
-//        List<WebElement> prices = driver.findElements(By.className("b-availability__price"));
-//
-//        int count = 0;
-//        String hertzCategory;
-//        int price;
-//        for (int i = 0; i < cars.size(); i++) {
-//            if (i % 2 == 0) {
-//                hertzCategory = cars.get(i).getText().substring(6,7);
-//                price = Integer.parseInt(prices.get(count).getText().substring(1).split(",")[0].replace(",",""));
-//                count++;
-//
-//                siteQuotes.put(hertzCategory, price);
-//            }
-//        }
-//
-//        AtomicInteger countCars = new AtomicInteger();
-//        result.append("----------HERTZ----------\n");
-//        siteQuotes.entrySet().forEach(entry -> {
-//            System.out.println(carNames.get(countCars.get()).getText() + " " + entry.getKey() + "\n" + entry.getValue());
-//            result.append(carNames.get(countCars.get()).getText()).append(" ").append(entry.getKey()).append("\n").append(entry.getValue()).append("\n");
-//            countCars.getAndIncrement();
-//            countCars.getAndIncrement();
-//        });
-//        driver.close();
-//        buildQuotes();
-//    }
-//
-//    public void buildQuotes() {
-//        int economic =
-//                (int)((siteQuotes.get("A") + siteQuotes.get("B") + siteQuotes.get("G")) / 3);
-//        int luxA = siteQuotes.get("M");
-//        int luxB = siteQuotes.get("W");
-//        int lux4 = siteQuotes.get("Z");
-//        int standard =
-//                (int)((siteQuotes.get("P")+ siteQuotes.get("H")+ siteQuotes.get("D")) /3);
-//        int mpv = (int) (siteQuotes.get("X") * 0.6);
-//
-//
-//        quotes.put(CATEGORY.Economic, economic);
-//        quotes.put(CATEGORY.Luxury_A, luxA);
-//        quotes.put(CATEGORY.Luxury_B, luxB);
-//        quotes.put(CATEGORY.Luxury_4x4, lux4);
-//        quotes.put(CATEGORY.Standard, standard);
-//        quotes.put(CATEGORY.MPV, mpv);
-//    }
-//}
+package com.ak.rentalrates.WebSites;
+
+import com.ak.rentalrates.CATEGORY;
+import com.ak.rentalrates.CarQuote;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public class WSHertz extends WebScrapper {
+
+    public WSHertz(LocalDate from, LocalDate to) {
+        name = "Hertz";
+        this.fromDate   = from;
+        this.toDate     = to;
+
+        XPATHS.put("location", "//*[@id=\"select2-PickupLocationCode-container\"]/span");
+        XPATHS.put("limassol", "/html/body/span/span/span[1]/input");
+        XPATHS.put("limOption", "//*[@id=\"select2-PickupLocationCode-results\"]/li");
+        XPATHS.put("from", "//*[@id=\"PickupDate\"]");
+        XPATHS.put("to", "//*[@id=\"ReturnDate\"]");
+        XPATHS.put("submit", "//*[@id=\"booking-step1-form\"]/div[2]/div[1]/div/div[3]/div/button[2]");
+        XPATHS.put("showAll", "//*[@id=\"chooseVehicle\"]/div[2]/div[1]/div[2]/div[2]/div/div[2]/div/button");
+    }
+    @Override
+    public void findQuotes() {
+        try {
+            final WebClient webClient = new WebClient();
+            webClient.getOptions().setCssEnabled(false);
+            webClient.getOptions().setJavaScriptEnabled(true);
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+
+            HtmlPage page = webClient.getPage("https://www.hertz.com.cy/en");
+            webClient.waitForBackgroundJavaScript(waitTime);
+
+            HtmlSpan location = page.getFirstByXPath(XPATHS.get("location"));
+            page = location.click();
+            HtmlInput limassol = page.getFirstByXPath(XPATHS.get("limassol"));
+            limassol.type("limassol");
+
+            webClient.waitForBackgroundJavaScript(waitTime);
+            HtmlListItem limOption = page.getFirstByXPath(XPATHS.get("limOption"));
+            page = limOption.click();
+
+            HtmlInput from      = page.getFirstByXPath(XPATHS.get("from"));
+            HtmlInput to        = page.getFirstByXPath(XPATHS.get("to"));
+            HtmlButton submit   = page.getFirstByXPath(XPATHS.get("submit"));
+
+            from.setValue(formatter.format(fromDate));
+            to.setValue(formatter.format(toDate));
+            webClient.waitForBackgroundJavaScript(waitTime);
+            submit.click();
+
+            webClient.waitForBackgroundJavaScript(waitTime);
+            page = (HtmlPage) webClient.getCurrentWindow().getEnclosedPage();
+
+            HtmlButton showAll = page.getFirstByXPath(XPATHS.get("showAll"));
+            showAll.click();
+
+            webClient.waitForBackgroundJavaScript(waitTime);
+            page = (HtmlPage) webClient.getCurrentWindow().getEnclosedPage();
+
+            List<HtmlDivision> carItems = page.getByXPath("//div[@class = 's-chooseVehicle__vehicle']");
+//            //   var json_vehicles = {  "CarsView": get this and find keys
+//            System.out.println(page.asXml());
+            // todo: check, some duplicates and some empty, check order in dom
+            for (HtmlElement carItem : carItems) {
+//                System.out.println(carItem.asXml());
+                Iterable<DomElement> details = carItem.getDomElementDescendants();
+                CarQuote carQuote = new CarQuote();
+                for (DomElement detail : details) {
+                    // car name
+                    if(detail.getAttribute("class").equals("e-typo-model")) {
+                        carQuote.setCar(detail.asNormalizedText());
+                        continue;
+                    }
+                    // car group
+                    if(detail.getAttribute("class").equals("e-typo-group")) {
+                        carQuote.setGroup(detail.asNormalizedText());
+                        carQuote.setCategory(findCategory(detail.asNormalizedText()));
+                        continue;
+                    }
+                    // car price
+                    if(detail.getAttribute("class").equals("b-availability__price")) {
+                        String price = detail.asNormalizedText();
+                        carQuote.setPrice(formatPrice(price));
+                        break;
+                    }
+                }
+                this.sitesListOfCarQuotes.add(carQuote);
+            }
+            // Todo: retry if exception from the top 5 attempts
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected CATEGORY findCategory(String group) {
+        try {
+            group = group.split("\\|")[0]
+                    .substring(6)
+                    .strip();
+        } catch (StringIndexOutOfBoundsException e) {
+            return CATEGORY.None;
+        }
+        return switch (group) {
+            case "A", "B", "G" -> CATEGORY.Economic;
+            case "M" -> CATEGORY.Luxury_A;
+            case "W" -> CATEGORY.Luxury_B;
+            case "Z" -> CATEGORY.Luxury_4x4;
+            case "P", "H" -> CATEGORY.Standard;
+            case "X" -> CATEGORY.MPV;
+            default -> CATEGORY.None;
+        };
+    }
+
+    @Override
+    protected int formatPrice(String price) {
+        price = price.replace("€", "")
+                .replace(",", "")
+                .strip()
+                .split("\\.")[0];
+        try {
+            return Integer.parseInt(price);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+}

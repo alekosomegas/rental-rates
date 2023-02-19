@@ -7,11 +7,9 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class WSLeos extends WebScrapper{
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public WSLeos(LocalDate from, LocalDate to) {
         name = "Leos";
@@ -92,7 +90,7 @@ public class WSLeos extends WebScrapper{
         try {
             group = group.split("/")[0].substring(7, 9);
         } catch (StringIndexOutOfBoundsException e) {
-            return null;
+            return CATEGORY.None;
         }
         return switch (group) {
             case "A1", "A2", "B1", "B2" -> CATEGORY.Economic;
@@ -101,7 +99,7 @@ public class WSLeos extends WebScrapper{
             case "C4", "H2", "F2", "D2" -> CATEGORY.Luxury_4x4;
             case "C1", "C2" -> CATEGORY.Standard;
             case "E1" -> CATEGORY.MPV;
-            default -> null;
+            default -> CATEGORY.None;
         };
     }
 

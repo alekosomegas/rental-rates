@@ -1,5 +1,6 @@
 package com.ak.rentalrates;
 
+import com.ak.rentalrates.WebSites.WSHertz;
 import com.ak.rentalrates.WebSites.WSLeos;
 import com.ak.rentalrates.WebSites.WSPetsas;
 import com.ak.rentalrates.WebSites.WebScrapper;
@@ -161,10 +162,8 @@ public class RentalRatesController {
         // add webscrappers to the list
         webScrappers.add(new WSPetsas(fromDatePicker.getValue(), toDatePicker.getValue()));
         webScrappers.add(new WSLeos(fromDatePicker.getValue(), toDatePicker.getValue()));
-//        webScrappers.add(new WSPetsas(dateRangeCoords));
-//        webScrappers.add(new WSHertz(dateRangeCoords));
-//        webScrappers.add(new WSLeos(fromDatePicker.getValue(), toDatePicker.getValue()));
-//        webScrappers.add(new WSEuropcar());
+        webScrappers.add(new WSHertz(fromDatePicker.getValue(), toDatePicker.getValue()));
+
 
         ExecutorService executor= Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         for (WebScrapper webScrapper : webScrappers) {

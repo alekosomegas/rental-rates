@@ -136,6 +136,7 @@ public class WSPetsas extends WebScrapper {
         }
     }
 
+    @Override
     protected int formatPrice(String price) {
         price = price.replace("€", "")
                 .replace(",","")
@@ -147,6 +148,7 @@ public class WSPetsas extends WebScrapper {
             return 0;
         }
     }
+    @Override
     protected CATEGORY findCategory(String group) {
         group = group.split(" - ")[0].substring(7);
         return switch (group) {

@@ -4,6 +4,7 @@ import com.ak.rentalrates.CATEGORY;
 import com.ak.rentalrates.CarQuote;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,6 +14,7 @@ public abstract class WebScrapper implements Runnable{
     public ArrayList<CarQuote> sitesListOfCarQuotes = new ArrayList<>();
     protected LocalDate fromDate;
     protected LocalDate toDate;
+    protected DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     protected final int waitTime = 10000;
     protected HashMap<String,String> XPATHS = new HashMap<>();
     protected String name;
