@@ -4,7 +4,6 @@ import com.ak.rentalrates.CATEGORY;
 import com.ak.rentalrates.CarQuote;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -14,6 +13,11 @@ import java.util.Locale;
 public class WSPetsas extends WebScrapper {
     public WSPetsas(LocalDate from, LocalDate to) {
         name = "Petsas";
+
+        // TODO: send message to be displayed, need 2 days in advance
+//        if (Duration.between(from.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 3) {
+//            return ;
+//        }
         this.fromDate = from;
         this.toDate = to;
 
@@ -37,6 +41,7 @@ public class WSPetsas extends WebScrapper {
             webClient.getOptions().setThrowExceptionOnScriptError(false);
 
             HtmlPage page = webClient.getPage("https://www.petsas.com.cy/en/choose-vehicle/bms-2/");
+            webClient.waitForBackgroundJavaScript(waitTime);
 
             HtmlInput location = page.getFirstByXPath(XPATHS.get("location"));
             page = location.click();
@@ -142,7 +147,7 @@ public class WSPetsas extends WebScrapper {
             return 0;
         }
     }
-    protected @Nullable CATEGORY findCategory(String group) {
+    protected CATEGORY findCategory(String group) {
         group = group.split(" - ")[0].substring(7);
         return switch (group) {
             case "A3", "B3", "A5", "C2", "B5", "D5" -> CATEGORY.Economic;

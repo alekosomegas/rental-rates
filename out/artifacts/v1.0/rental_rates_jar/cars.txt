@@ -1,0 +1,6 @@
+Mercedes C Hatchback,Luxury_A
+Mercedes ML,Luxury_4x4
+Mercedes E,Luxury_B
+Mercedes C,Standard
+Fiat 500,Economic
+Ford Galaxy,MPV

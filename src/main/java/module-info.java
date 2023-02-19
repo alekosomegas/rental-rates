@@ -8,7 +8,6 @@ module com.ak.rentalrates {
     requires org.seleniumhq.selenium.api;
     requires org.seleniumhq.selenium.chrome_driver;
     requires org.seleniumhq.selenium.support;
-    requires org.jetbrains.annotations;
 
     opens com.ak.rentalrates to javafx.fxml;
     exports com.ak.rentalrates;

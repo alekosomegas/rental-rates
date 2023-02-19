@@ -43,7 +43,8 @@ public class RentalRatesController {
     public Label averagePricePD;
     public Label highPricePD;
 
-    private Car selectedCar;
+    // instantiate a null car. Get prices from all quotes with matching category
+    private Car selectedCar = new Car(CATEGORY.None, "null");
     private ObservableList<Car> allCars = FXCollections.observableArrayList();
 
     private ArrayList<WebScrapper> webScrappers = new ArrayList<>();
@@ -63,8 +64,31 @@ public class RentalRatesController {
             e.printStackTrace();
         }
 
-        fromDatePicker.setValue(LocalDate.of(2023, 2, 20));
-        toDatePicker.setValue(LocalDate.of(2023, 3, 20));
+        fromDatePicker.setValue(LocalDate.now());
+        toDatePicker.setValue(LocalDate.now().plusDays(1));
+        fromDatePicker.valueProperty().addListener((ov, oldValue, newValue) -> {
+            if(newValue.isAfter(toDatePicker.getValue())
+                    || newValue.isEqual(toDatePicker.getValue())
+                    || newValue.isBefore(LocalDate.now())) {
+                getQuotesBtn.setDisable(true);
+                getQuotesBtn.setText("Check Dates");
+            } else {
+                getQuotesBtn.setDisable(false);
+                getQuotesBtn.setText("Get Quotes");
+            }
+        });
+        toDatePicker.valueProperty().addListener((ov, oldValue, newValue) -> {
+            if(newValue.isAfter(fromDatePicker.getValue())
+                    || newValue.isEqual(fromDatePicker.getValue())
+                    || newValue.isBefore(LocalDate.now().plusDays(1))) {
+                getQuotesBtn.setDisable(false);
+                getQuotesBtn.setText("Get Quotes");
+            } else {
+                getQuotesBtn.setDisable(true);
+                getQuotesBtn.setText("Check Dates");
+            }
+        });
+
 
         loadCars();
     }
@@ -72,7 +96,6 @@ public class RentalRatesController {
     /**
      * Load all cars from cars.txt
      */
-    // TODO: what happens when cannot read from cars.txt, when selectedCar is null
     private void loadCars() {
         try {
             allCars = Cars.getAllCars();
@@ -81,22 +104,23 @@ public class RentalRatesController {
                 list.add(car.getName());
             }
             selectCar.setItems(list);
+            selectCar.setValue("All");
+            selectCar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                    selectedCar = Cars.findCar(t1);
+                }
+            });
 
         } catch (IOException e) {
             e.printStackTrace();
+            selectCar.setValue("CANNOT FIND CARS");
+            selectCar.setDisable(true);
         }
-
-        selectCar.setValue("All");
-        selectCar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                selectedCar = Cars.findCar(t1);
-            }
-        });
     }
 
     @FXML
-    protected void onGetQuotesButtonClick() throws InterruptedException {
+    protected void onGetQuotesButtonClick() {
         from = fromDatePicker.getValue();
         to   = toDatePicker.getValue();
 
@@ -131,7 +155,7 @@ public class RentalRatesController {
         taResults.setText(results.getQuotesForCategory(from, to, selectedCar.getCategory()));
     }
 
-    private void scrapSites() throws InterruptedException {
+    private void scrapSites() {
         // remove previous webscrappers
         webScrappers.clear();
         // add webscrappers to the list
@@ -147,7 +171,11 @@ public class RentalRatesController {
             executor.execute(webScrapper);
         }
         executor.shutdown();
-        boolean finished = executor.awaitTermination(1, TimeUnit.MINUTES);
+        try {
+            boolean finished = executor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         for (WebScrapper webScrapper : webScrappers) {
             results.addResult(from, to, webScrapper.getName(), webScrapper.getQuotes());

@@ -60,12 +60,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>19.0.2.1</version>
@@ -81,6 +75,8 @@
                 <configuration>
                     <source>19</source>
                     <target>19</target>
+                    <compilerArgument>-proc:none</compilerArgument>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -92,7 +88,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.ak.rentalrates/com.ak.rentalrates.RentalRatesApplication</mainClass>
+                            <mainClass>com.ak.rentalrates/com.ak.rentalrates.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

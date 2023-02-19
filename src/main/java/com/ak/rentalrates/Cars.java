@@ -31,6 +31,7 @@ public class Cars {
                 return car;
             }
         }
-        return null;
+        // return a null car to search all quotes
+        return new Car(CATEGORY.None, "null");
     }
 }

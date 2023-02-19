@@ -34,6 +34,7 @@ public class WSLeos extends WebScrapper{
             webClient.getOptions().setThrowExceptionOnScriptError(false);
 
             HtmlPage page = webClient.getPage("https://www.leos.com.cy/en/reservation");
+            webClient.waitForBackgroundJavaScript(waitTime);
 
             final HtmlInput from = page.getFirstByXPath(XPATHS.get("from"));
             final HtmlInput to = page.getFirstByXPath(XPATHS.get("to"));
@@ -86,7 +87,6 @@ public class WSLeos extends WebScrapper{
         return Integer.parseInt(price);
     }
 
-    // TODO: implement
     @Override
     protected CATEGORY findCategory(String group) {
         try {
