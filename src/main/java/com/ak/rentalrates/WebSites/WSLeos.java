@@ -3,7 +3,6 @@ package com.ak.rentalrates.WebSites;
 
 import com.ak.rentalrates.CATEGORY;
 import com.ak.rentalrates.CarQuote;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.time.LocalDate;
@@ -24,13 +23,8 @@ public class WSLeos extends WebScrapper{
     }
 
     @Override
-    public void findQuotes() {
+    public boolean findQuotes() {
         try {
-            final WebClient webClient = new WebClient();
-            webClient.getOptions().setCssEnabled(false);
-            webClient.getOptions().setJavaScriptEnabled(true);
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-
             HtmlPage page = webClient.getPage("https://www.leos.com.cy/en/reservation");
             webClient.waitForBackgroundJavaScript(waitTime);
 
@@ -73,7 +67,9 @@ public class WSLeos extends WebScrapper{
 
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     protected int formatPrice(String price) {
@@ -82,7 +78,11 @@ public class WSLeos extends WebScrapper{
                      .replace(".", "")
                      .strip()
                      .split(",")[0];
-        return Integer.parseInt(price);
+        try {
+            return Integer.parseInt(price);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override

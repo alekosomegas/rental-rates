@@ -2,7 +2,6 @@ package com.ak.rentalrates.WebSites;
 
 import com.ak.rentalrates.CATEGORY;
 import com.ak.rentalrates.CarQuote;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.time.LocalDate;
@@ -24,13 +23,8 @@ public class WSHertz extends WebScrapper {
         XPATHS.put("showAll", "//*[@id=\"chooseVehicle\"]/div[2]/div[1]/div[2]/div[2]/div/div[2]/div/button");
     }
     @Override
-    public void findQuotes() {
+    public boolean findQuotes() {
         try {
-            final WebClient webClient = new WebClient();
-            webClient.getOptions().setCssEnabled(false);
-            webClient.getOptions().setJavaScriptEnabled(true);
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-
             HtmlPage page = webClient.getPage("https://www.hertz.com.cy/en");
             webClient.waitForBackgroundJavaScript(waitTime);
 
@@ -64,7 +58,6 @@ public class WSHertz extends WebScrapper {
             List<HtmlDivision> carItems = page.getByXPath("//div[@class = 's-chooseVehicle__vehicle']");
 //            //   var json_vehicles = {  "CarsView": get this and find keys
 //            System.out.println(page.asXml());
-            // todo: check, some duplicates and some empty, check order in dom
             for (HtmlElement carItem : carItems) {
 //                System.out.println(carItem.asXml());
                 Iterable<DomElement> details = carItem.getDomElementDescendants();
@@ -90,10 +83,11 @@ public class WSHertz extends WebScrapper {
                 }
                 this.sitesListOfCarQuotes.add(carQuote);
             }
-            // Todo: retry if exception from the top 5 attempts
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override

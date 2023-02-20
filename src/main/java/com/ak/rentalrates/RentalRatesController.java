@@ -1,9 +1,6 @@
 package com.ak.rentalrates;
 
-import com.ak.rentalrates.WebSites.WSHertz;
-import com.ak.rentalrates.WebSites.WSLeos;
-import com.ak.rentalrates.WebSites.WSPetsas;
-import com.ak.rentalrates.WebSites.WebScrapper;
+import com.ak.rentalrates.WebSites.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -163,6 +160,8 @@ public class RentalRatesController {
         webScrappers.add(new WSPetsas(fromDatePicker.getValue(), toDatePicker.getValue()));
         webScrappers.add(new WSLeos(fromDatePicker.getValue(), toDatePicker.getValue()));
         webScrappers.add(new WSHertz(fromDatePicker.getValue(), toDatePicker.getValue()));
+        webScrappers.add(new WSSimply(fromDatePicker.getValue(), toDatePicker.getValue()));
+        webScrappers.add(new WSDds(fromDatePicker.getValue(), toDatePicker.getValue()));
 
 
         ExecutorService executor= Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -183,7 +182,7 @@ public class RentalRatesController {
 
     public void close() {
         for (WebScrapper webScrapper : webScrappers) {
-            webScrapper.close();
+//            webScrapper.close();
         }
     }
 }

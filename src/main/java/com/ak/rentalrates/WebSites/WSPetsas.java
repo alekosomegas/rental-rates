@@ -2,9 +2,9 @@ package com.ak.rentalrates.WebSites;
 
 import com.ak.rentalrates.CATEGORY;
 import com.ak.rentalrates.CarQuote;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
@@ -13,11 +13,6 @@ import java.util.Locale;
 public class WSPetsas extends WebScrapper {
     public WSPetsas(LocalDate from, LocalDate to) {
         name = "Petsas";
-
-        // TODO: send message to be displayed, need 2 days in advance
-//        if (Duration.between(from.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() < 3) {
-//            return ;
-//        }
         this.fromDate = from;
         this.toDate = to;
 
@@ -33,13 +28,12 @@ public class WSPetsas extends WebScrapper {
     }
 
     @Override
-    public void findQuotes() {
+    public boolean findQuotes() {
+        if (Duration.between(LocalDate.now().atStartOfDay(), fromDate.atStartOfDay()).toDays() < 2) {
+            System.out.println("Petsas needs 2 days in advance");
+            return false;
+        }
         try {
-            final WebClient webClient = new WebClient();
-            webClient.getOptions().setCssEnabled(false);
-            webClient.getOptions().setJavaScriptEnabled(true);
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-
             HtmlPage page = webClient.getPage("https://www.petsas.com.cy/en/choose-vehicle/bms-2/");
             webClient.waitForBackgroundJavaScript(waitTime);
 
@@ -128,12 +122,11 @@ public class WSPetsas extends WebScrapper {
                     }
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-
+            return false;
         }
+        return true;
     }
 
     @Override
